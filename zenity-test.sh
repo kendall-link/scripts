@@ -2,8 +2,8 @@
 
 # Determine the number of packages that are upgradeable
 updates="$(apt list --upgradable 2>/dev/null | grep upgradable | wc -l)"
-echo $updates
 
+echo $updates # Check to validate the number of avalable updates
 
 # If there are no packages to update, exit.  Otherwise enter the IF.
 if [ $updates != 0 ]
@@ -21,11 +21,14 @@ then
         --extra-button 'Update Now' \
         )
     rc=$?
-    echo "${rc}-${choice}"
-    echo $choice
+
+    echo "${rc}-${choice}" # Check to validate rc value and user choice
+
     if [[ $choice = "Update Now" ]]
     then
-          echo "Updating system"
+
+          echo "Updating system" # Check to validate it's in the Update Now loop
+
           PASSWORD=$(zenity --password --title 'Linux Updater')
           echo $PASSWORD | sudo -S sudo apt-get --with-new-pkgs upgrade | zenity --progress --title="Linux Updater"
           rc=0
