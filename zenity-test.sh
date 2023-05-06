@@ -1,23 +1,29 @@
 #!/bin/bash
 
+# Determine the number of packages that are upgradeable
 updates="$(apt list --upgradable 2>/dev/null | grep upgradable | wc -l)"
 echo $updates
 
+
+# If there are no packages to update, exit.  Otherwise enter the IF.
 if [ $updates != 0 ]
 then
 
-  rc=1 # OK button return code =0 , all others =1
-
+  # Set the return code (rc) to a value of 1
+  rc=1
+  
+  # As long as the rc value is equal to one, it will stay in the do while loop.
   while [ $rc -eq 1 ]; do
-    ans=$(zenity --info --title 'Linux Updater' \
-        --text 'There are '$updates' Security and Application updates available for your system' \
+
+    choice=$(zenity --info --title 'Linux Updater' \
+        --text "There's $updates Security and Application update(s) available for your system" \
         --ok-label Quit \
         --extra-button 'Update Now' \
         )
     rc=$?
-    echo "${rc}-${ans}"
-    echo $ans
-    if [[ $ans = "Update Now" ]]
+    echo "${rc}-${choice}"
+    echo $choice
+    if [[ $choice = "Update Now" ]]
     then
           echo "Updating system"
           PASSWORD=$(zenity --password --title 'Linux Updater')
